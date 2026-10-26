@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question about using the editor
+    url: https://github.com/AKASHNEGI-github/react-easy-editor#faq
+    about: The README FAQ covers the common ones.
+  - name: Security problem
+    url: https://github.com/AKASHNEGI-github/react-easy-editor/security/advisories/new
+    about: Please report vulnerabilities privately.

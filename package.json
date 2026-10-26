@@ -1,0 +1,118 @@
+{
+  "name": "react-easy-editor",
+  "version": "1.1.0",
+  "description": "React WYSIWYG rich text editor in one component: tables, tabbed code blocks with syntax highlighting, image upload, dark mode, HTML source view, TypeScript types. MIT, zero config.",
+  "keywords": [
+    "react",
+    "react-editor",
+    "react-text-editor",
+    "react-rich-text-editor",
+    "react-wysiwyg",
+    "react-wysiwyg-editor",
+    "react-component",
+    "text-editor",
+    "rich-text-editor",
+    "rich-text",
+    "wysiwyg",
+    "wysiwyg-editor",
+    "html-editor",
+    "editor",
+    "contenteditable",
+    "nextjs",
+    "typescript",
+    "dark-mode",
+    "code-blocks",
+    "syntax-highlighting",
+    "table-editor",
+    "markdown-shortcuts",
+    "image-upload",
+    "react-easy-editor",
+    "easy-editor",
+    "react-editor-component",
+    "text-editor-component",
+    "richtext"
+  ],
+  "author": "Akash Negi",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AKASHNEGI-github/react-easy-editor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AKASHNEGI-github/react-easy-editor/issues"
+  },
+  "homepage": "https://akashnegi-github.github.io/react-easy-editor/",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./style.css": "./dist/style.css",
+    "./dist/style.css": "./dist/style.css",
+    "./package.json": "./package.json"
+  },
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build --config vite.lib.config.js",
+    "build:demo": "vite build",
+    "build:hljs-css": "node scripts/generate-hljs-css.mjs",
+    "preview": "vite preview",
+    "lint": "oxlint src build scripts tests",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "node tests/e2e/run.mjs",
+    "check:css": "node scripts/check-css-scope.mjs",
+    "check:package": "publint && attw --pack . --profile node16 --exclude-entrypoints style.css dist/style.css",
+    "test:package": "node scripts/smoke-test.mjs",
+    "screenshots": "node scripts/screenshots.mjs",
+    "prepublishOnly": "npm run lint && npm test && npm run build && npm run check:css && npm run check:package"
+  },
+  "peerDependencies": {
+    "react": ">=17"
+  },
+  "dependencies": {
+    "highlight.js": "^11.12.0"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.2",
+    "@fontsource-variable/hanken-grotesk": "^5.3.0",
+    "@fontsource-variable/jetbrains-mono": "^5.3.0",
+    "@fontsource-variable/newsreader": "^5.3.0",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/react": "^16.3.3",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.4",
+    "jsdom": "^30.1.3",
+    "oxlint": "^1.75.0",
+    "postcss": "^8.5.6",
+    "publint": "^0.3.12",
+    "puppeteer-core": "^25.16.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "vite": "^8.2.0",
+    "vitest": "^5.0.5"
+  }
+}

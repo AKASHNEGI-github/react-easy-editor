@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: React ${{ matrix.react }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        react: ['18', '19']
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # The lockfile pins React 19. For the other versions, swap React in without touching package.json.
+      - name: Use React ${{ matrix.react }}
+        if: matrix.react != '19'
+        run: npm install --no-save --legacy-peer-deps react@${{ matrix.react }} react-dom@${{ matrix.react }}
+
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+      - run: npm run check:css
+      - run: npm run check:package
+      - run: npm run test:package
+
+      # GitHub's Ubuntu runners already have Google Chrome (/usr/bin/google-chrome).
+      - run: npm run test:e2e

@@ -1,0 +1,46 @@
+name: Release
+
+# Publishes to npm when you push a version tag such as v1.1.1 (see docs/PUBLISHING.md).
+# Uses npm trusted publishing, so no npm token is stored in GitHub. That has to be set up once on
+# npmjs.com first, and the package has to exist (publish the first version by hand).
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+  id-token: write # lets npm verify this workflow's identity and attach provenance
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+          cache: npm
+
+      # Trusted publishing needs npm 11.5.1 or newer.
+      - run: npm install -g npm@latest
+
+      - run: npm ci
+
+      - name: The tag must match package.json
+        run: test "v$(node -p "require('./package.json').version")" = "$GITHUB_REF_NAME"
+
+      # The first release is published by hand, so tagging it later must not try to publish it again.
+      - name: Is this version already on npm?
+        id: exists
+        run: |
+          if npm view "$(node -p "require('./package.json').name")@$(node -p "require('./package.json').version")" version > /dev/null 2>&1; then
+            echo "published=true" >> "$GITHUB_OUTPUT"
+            echo "This version is already on npm, nothing to publish."
+          fi
+
+      # `npm publish` runs prepublishOnly first: lint, unit tests, build, CSS scope and package checks.
+      - name: Publish
+        if: steps.exists.outputs.published != 'true'
+        run: npm publish --provenance --access public

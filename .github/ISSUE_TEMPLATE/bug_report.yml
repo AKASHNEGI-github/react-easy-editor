@@ -1,0 +1,35 @@
+name: Bug report
+description: Something does not work the way it should
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, and what happened instead? A screenshot or a short video helps a lot.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: How can we reproduce it?
+      description: A link to a StackBlitz or CodeSandbox is best. Otherwise, the smallest code and the HTML that shows the problem.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: react-easy-editor version
+      placeholder: "1.1.0"
+    validations:
+      required: true
+  - type: input
+    id: react
+    attributes:
+      label: React version and framework
+      placeholder: "React 19, Next.js 15 (App Router)"
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and operating system
+      placeholder: "Safari 18 on macOS"

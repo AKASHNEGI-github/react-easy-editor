@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>React Easy Editor: a rich text editor for React in one component</title>
+    <meta name="description" content="React Easy Editor is a free, MIT-licensed rich text (WYSIWYG) editor for React. Tables, code blocks with syntax highlighting, image upload, Markdown shortcuts, dark mode, five interface languages and TypeScript types. Try it live." />
+    <link rel="canonical" href="https://akashnegi-github.github.io/react-easy-editor/" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#e7ecf1" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="React Easy Editor" />
+    <meta property="og:title" content="React Easy Editor: a rich text editor for React in one component" />
+    <meta property="og:description" content="Tables, code blocks, image upload, Markdown shortcuts, dark mode and five interface languages. Free and MIT licensed. Try it live." />
+    <meta property="og:url" content="https://akashnegi-github.github.io/react-easy-editor/" />
+    <meta property="og:image" content="https://akashnegi-github.github.io/react-easy-editor/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="The React Easy Editor demo: a rich text editor with a full toolbar." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="React Easy Editor: a rich text editor for React" />
+    <meta name="twitter:description" content="One component, a full toolbar, no setup. Free and MIT licensed." />
+    <meta name="twitter:image" content="https://akashnegi-github.github.io/react-easy-editor/og.png" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareSourceCode",
+        "name": "React Easy Editor",
+        "alternateName": "react-easy-editor",
+        "description": "A rich text (WYSIWYG) editor component for React with tables, code blocks, image upload, Markdown shortcuts, dark mode and TypeScript types.",
+        "url": "https://akashnegi-github.github.io/react-easy-editor/",
+        "codeRepository": "https://github.com/AKASHNEGI-github/react-easy-editor",
+        "programmingLanguage": "JavaScript",
+        "runtimePlatform": "React",
+        "license": "https://opensource.org/licenses/MIT",
+        "author": { "@type": "Person", "name": "Akash Negi" }
+      }
+    </script>
+
+    <!-- Apply the saved or system theme before first paint so the page never flashes the wrong one. -->
+    <script>
+      try {
+        var t = localStorage.getItem('ree-theme');
+        if (t !== 'light' && t !== 'dark') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="root">
+      <!-- Static copy for crawlers and people without JavaScript. React replaces it on load. -->
+      <header class="top wrap">
+        <span class="brand">react-easy-editor</span>
+        <nav class="nav">
+          <a href="https://github.com/AKASHNEGI-github/react-easy-editor">GitHub</a>
+          <a href="https://www.npmjs.com/package/react-easy-editor">npm</a>
+        </nav>
+      </header>
+      <main>
+        <section class="hero wrap">
+          <h1>Rich text editing for React, in one component.</h1>
+          <p class="lede">React Easy Editor is a free, MIT-licensed WYSIWYG editor for React. Add <code>&lt;Editor /&gt;</code> and your users get a full toolbar, tables, code blocks with syntax highlighting, image upload, Markdown shortcuts and dark mode.</p>
+          <p><code>npm install react-easy-editor</code></p>
+        </section>
+        <section class="wrap">
+          <h2>What you get</h2>
+          <ul>
+            <li>Controlled <code>value</code> and <code>onChange</code>, plus a <code>ref</code> with getHTML, setHTML, focus and more</li>
+            <li>Image upload hook for picked, dropped and pasted images</li>
+            <li>Markdown shortcuts, character limit and right-to-left text</li>
+            <li>Interface in English, Spanish, French, German and Hindi</li>
+            <li>TypeScript types, ESM and CommonJS builds, Next.js App Router support</li>
+          </ul>
+          <noscript><p>The live demo needs JavaScript.</p></noscript>
+        </section>
+      </main>
+    </div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
