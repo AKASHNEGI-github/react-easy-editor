@@ -41,7 +41,7 @@
   "bugs": {
     "url": "https://github.com/AKASHNEGI-github/react-easy-editor/issues"
   },
-  "homepage": "https://akashnegi-github.github.io/react-easy-editor/",
+  "homepage": "https://react-easy-editor.netlify.app/",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
