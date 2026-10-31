@@ -161,7 +161,10 @@ export interface EditorProps {
 
 /** What a parent gets from `<Editor ref={ref} />`. */
 export interface EditorHandle {
-  /** The current HTML. */
+  /**
+   * The current HTML. The empty line the editor keeps under a trailing code block, table, divider,
+   * alert or quote (so the caret can always go after it) is left out until something is typed in it.
+   */
   getHTML(): string;
   /** Replaces the content (sanitized) and calls `onChange`. */
   setHTML(html: string): void;

@@ -4,6 +4,19 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project follows
 [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Fixed
+
+- **You could not put the cursor after a code block** (or a table, divider, alert, quote or `<pre>`) at the end
+  of a document, so there was no way to keep writing below it. Typing went before the block, inside it, or as
+  loose text. The editor now keeps one empty line after such a block, so you can always click below it and
+  continue. The line is only an editing aid: `getHTML()`, `onChange` and form values leave it out until you
+  type in it, so the HTML you save does not change.
+- **Backspace on the empty line under a code block or a table deleted the whole block.** It now leaves the
+  block alone. If the empty line has more content below it, only that line is removed.
+- The README published with 1.1.0 linked to a demo address that does not exist. It now points to the live demo.
+
 ## [1.1.0] - 2026-10-26
 
 ### Renamed

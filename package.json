@@ -1,6 +1,6 @@
 {
   "name": "react-easy-editor",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "React WYSIWYG rich text editor in one component: tables, tabbed code blocks with syntax highlighting, image upload, dark mode, HTML source view, TypeScript types. MIT, zero config.",
   "keywords": [
     "react",

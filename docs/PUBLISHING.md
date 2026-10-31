@@ -2,14 +2,16 @@
 
 Everything here is run from the project folder. Nothing in `docs/` ships in the npm package.
 
-## The first release under the new name (do this once, in order)
+## The first release under the new name (done for 1.1.0, kept for reference)
 
 1. **Rename the GitHub repository** to `react-easy-editor` (Settings → General → Repository name).
    `package.json`, the README badges and the demo site all point at `AKASHNEGI-github/react-easy-editor`.
-   GitHub redirects the old repository address for a while, but the old Pages address does not redirect.
+   GitHub redirects the old repository address for a while.
 2. **Copy this project into the repository** and push it to `main`. The `CI` workflow runs on every push.
-3. **Turn on GitHub Pages** (Settings → Pages → Build and deployment → Source: **GitHub Actions**). The `Demo site`
-   workflow then publishes <https://akashnegi-github.github.io/react-easy-editor/> on each push to `main`.
+3. **Deploy the demo site on Netlify** (done: <https://react-easy-editor.netlify.app/>). In Netlify choose Add new site →
+   Import from Git and pick the repository. `netlify.toml` already sets the build command (`npm run build:demo`) and
+   the publish folder (`demo-dist`), so nothing needs typing in. Netlify then redeploys on every push to `main`.
+   (`npm run build` builds the npm package into `dist/`; the site has its own command.)
 4. **Check the name is still free**, then publish the first version by hand:
 
    ```bash

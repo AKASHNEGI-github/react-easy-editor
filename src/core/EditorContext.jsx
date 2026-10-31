@@ -8,6 +8,7 @@ import { sanitizeHtml } from './sanitize';
 import { createTranslator } from './i18n';
 import { saveCaret, restoreCaret, placeCaretAtEnd } from './caret';
 import { UPLOAD_ATTR, DEFAULT_MAX_IMAGE_SIZE } from './imageUpload';
+import { ensureTrailingParagraph, withoutTrailingBlank } from './trailingParagraph';
 
 const EditorContext = createContext(null);
 
@@ -130,15 +131,17 @@ export function EditorProvider({
   }, []);
   useEffect(() => () => clearTimeout(noticeTimerRef.current), []);
 
-  // Images still uploading are placeholders marked with a data attribute (see core/imageUpload.js).
-  // They are left out of everything the host sees: onChange, form value, undo snapshots.
+  // Two things are left out of everything the host sees (onChange, the form value, undo snapshots):
+  // images still uploading, which are placeholders marked with a data attribute (core/imageUpload.js),
+  // and the empty paragraph the editor keeps after a trailing block so the caret has somewhere to go
+  // (core/trailingParagraph.js). Neither is content yet.
   const getHTML = useCallback(() => {
     const el = containerRef.current;
     if (!el) return '';
-    if (!el.querySelector(`[${UPLOAD_ATTR}]`)) return el.innerHTML;
+    if (!el.querySelector(`[${UPLOAD_ATTR}]`)) return withoutTrailingBlank(el.innerHTML);
     const copy = el.cloneNode(true);
     copy.querySelectorAll(`[${UPLOAD_ATTR}]`).forEach((node) => node.remove());
-    return copy.innerHTML;
+    return withoutTrailingBlank(copy.innerHTML);
   }, []);
 
   // Callback ref for the hidden form input: whenever it mounts (also when `name` is added later,
@@ -177,7 +180,8 @@ export function EditorProvider({
         // some other path gets stopped before it can run again.
         const clean = sanitizeHtml(html);
         containerRef.current.innerHTML = clean;
-        emit(clean);
+        if (!lockedRef.current) ensureTrailingParagraph(containerRef.current);
+        emit(withoutTrailingBlank(clean));
       }
     },
     [emit]
@@ -251,13 +255,15 @@ export function EditorProvider({
       }
       if (next === lastEmittedRef.current || recentRef.current.includes(next)) return;
       const clean = sanitizeHtml(next);
-      if (clean === getHTML()) return;
+      const out = withoutTrailingBlank(clean); // what getHTML() would report for this content
+      if (out === getHTML()) return;
       const focused = el === document.activeElement || el.contains(document.activeElement);
       const caret = focused ? saveCaret(el) : null;
       el.innerHTML = clean;
+      if (!lockedRef.current) ensureTrailingParagraph(el);
       if (caret) restoreCaret(el, caret);
-      if (hiddenInputRef.current) hiddenInputRef.current.value = clean;
-      lastEmittedRef.current = clean;
+      if (hiddenInputRef.current) hiddenInputRef.current.value = out;
+      lastEmittedRef.current = out;
       // Typing-time corrections stay undoable; loading a different document starts fresh.
       if (focused) historyRef.current.snapshotNow();
       else historyRef.current.reset();
@@ -313,6 +319,7 @@ export function EditorProvider({
       // directly in the DOM before any editor.setHTML() call exists to
       // pass through.
       containerRef.current.innerHTML = sanitizeHtml(initialValue);
+      if (!lockedRef.current) ensureTrailingParagraph(containerRef.current);
     }
 
     plugins.forEach((plugin) => {

@@ -6,6 +6,7 @@ import { handleTableTabKeyDown } from '../core/tableUtils';
 import { handleMarkdownKeyDown } from '../core/markdownShortcuts';
 import { hasFiles, isImageFile, insertImageFiles, rangeFromPoint } from '../core/imageUpload';
 import { remainingCapacity } from '../core/limits';
+import { guardBackspaceAfterBlock, watchTrailingParagraph } from '../core/trailingParagraph';
 
 // This is the one component in the whole app that is NOT re-rendered from
 // React state on every keystroke. contentEditable owns its own DOM while
@@ -37,6 +38,32 @@ export default function EditorCore() {
     };
     el.addEventListener('beforeinput', onBeforeInput);
     return () => el.removeEventListener('beforeinput', onBeforeInput);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // The caret must always have somewhere to go after the last block (a code block, table, divider...).
+  // See core/trailingParagraph.js. Locking the editor stops it; unlocking runs it again.
+  useEffect(() => {
+    const el = editor.containerRef.current;
+    if (!el) return undefined;
+    return watchTrailingParagraph(el, () => !editorRef.current.locked);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editor.locked]);
+
+  // Backspace in the empty line under a code block or table must not delete that block. This listens
+  // for the backward deletion itself (not the key), so phone keyboards and IMEs are covered too.
+  useEffect(() => {
+    const el = editor.containerRef.current;
+    if (!el) return undefined;
+    const onBackwardDelete = (e) => {
+      if (!e.inputType || !e.inputType.endsWith('Backward')) return;
+      const outcome = guardBackspaceAfterBlock(el);
+      if (!outcome) return;
+      e.preventDefault();
+      if (outcome === 'removed') editorRef.current.onInput();
+    };
+    el.addEventListener('beforeinput', onBackwardDelete);
+    return () => el.removeEventListener('beforeinput', onBackwardDelete);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

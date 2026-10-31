@@ -12,7 +12,7 @@ toolbar, tables, code blocks with syntax highlighting, image upload, Markdown sh
 Nothing to configure, and it saves plain HTML.
 
 <p align="center">
-  <a href="https://akashnegi-github.github.io/react-easy-editor/">
+  <a href="https://react-easy-editor.netlify.app/">
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/AKASHNEGI-github/react-easy-editor/main/docs/screenshot-dark.png">
       <img alt="React Easy Editor: a rich text editor with a toolbar, headings, a list, a table, a tip box and a code block" src="https://raw.githubusercontent.com/AKASHNEGI-github/react-easy-editor/main/docs/screenshot-light.png" width="820">
@@ -20,7 +20,7 @@ Nothing to configure, and it saves plain HTML.
   </a>
 </p>
 
-**[Try it live](https://akashnegi-github.github.io/react-easy-editor/)** · [Quick start](#quick-start) · [Recipes](#recipes) · [Props](#props) · [FAQ](#faq)
+**[Try it live](https://react-easy-editor.netlify.app/)** · [Quick start](#quick-start) · [Recipes](#recipes) · [Props](#props) · [FAQ](#faq)
 
 ## Quick start
 
@@ -271,7 +271,7 @@ screen always fills the window and hands the size back when you leave it.
 
 | Method | What it does |
 | --- | --- |
-| `getHTML()` | The current HTML. |
+| `getHTML()` | The current HTML. The empty line the editor keeps under a trailing block (see the [FAQ](#faq)) is left out. |
 | `setHTML(html)` | Replaces the content (sanitized) and calls `onChange`. |
 | `getText()` | The content as plain text. |
 | `isEmpty()` | `true` when there is no text and no image, table, video or code block. |
@@ -556,6 +556,12 @@ function, images are embedded in the HTML as base64, which makes the HTML large.
 
 **Can people paste from Word or Google Docs?** Yes. Pasted HTML is accepted and sanitized the same way as
 everything else the editor loads.
+
+**Why is there an empty line under my last code block, table or quote?** The editor keeps one empty line after a
+block the cursor cannot move past (a code block, table, divider, alert, quote or `<pre>`), so you can always click
+below it and keep typing. It is only there to help you write. `getHTML()`, `onChange` and form values leave it out
+until you type something in it, so your saved HTML does not gain blank paragraphs. Pressing Backspace on that line
+never deletes the block above it.
 
 **How do I add or remove toolbar buttons?** [Customizing the toolbar](#customizing-the-toolbar).
 

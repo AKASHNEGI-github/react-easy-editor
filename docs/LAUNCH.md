@@ -11,7 +11,7 @@ GitHub search and Google both read these, so they matter as much as the README.
 
 - **Description:**
   `A free, open-source rich text (WYSIWYG) editor for React. One component: full toolbar, tables, code blocks, image upload, Markdown shortcuts, dark mode, 5 languages. TypeScript, MIT.`
-- **Website:** `https://akashnegi-github.github.io/react-easy-editor/`
+- **Website:** `https://react-easy-editor.netlify.app/`
 - **Topics** (GitHub allows 20):
   `react` `react-editor` `rich-text-editor` `wysiwyg` `wysiwyg-editor` `text-editor` `react-component`
   `react-text-editor` `html-editor` `contenteditable` `typescript` `nextjs` `markdown-shortcuts`
@@ -19,8 +19,6 @@ GitHub search and Google both read these, so they matter as much as the README.
 
 **Settings → General → Social preview:** upload `docs/social-preview.png` (1280 × 640). It is the image shown
 when the repository link is shared.
-
-**Settings → Pages:** Source = GitHub Actions (see [PUBLISHING.md](./PUBLISHING.md)).
 
 **Settings → Code security:** turn on **Private vulnerability reporting** (`SECURITY.md` points to it) and
 **Dependabot alerts**.
@@ -31,10 +29,10 @@ section of `CHANGELOG.md`. A repository with a recent release looks alive to vis
 ## 2. Get the demo site found
 
 1. Open <https://search.google.com/search-console> and add the property
-   `https://akashnegi-github.github.io/react-easy-editor/` (URL prefix).
+   `https://react-easy-editor.netlify.app/` (URL prefix).
 2. Verify it with the **HTML tag** method: paste the `<meta name="google-site-verification" ...>` line into the
    `<head>` of `index.html`, push, then click Verify.
-3. Submit `https://akashnegi-github.github.io/react-easy-editor/sitemap.xml`.
+3. Submit `https://react-easy-editor.netlify.app/sitemap.xml`.
 
 The page already has a title, description, canonical address, social-share tags and structured data, and a
 plain-HTML copy of the key text for crawlers that do not run JavaScript.
@@ -67,7 +65,7 @@ the same day. How you handle the first feedback matters more than the post itsel
 >
 > You get tables, tabbed code blocks with syntax highlighting, image upload, find and replace, Markdown
 > shortcuts as you type, a dark theme, right-to-left text and an interface in five languages. It saves plain
-> HTML. You can [try it in the browser](https://akashnegi-github.github.io/react-easy-editor/) without
+> HTML. You can [try it in the browser](https://react-easy-editor.netlify.app/) without
 > installing anything.
 >
 > **Three things I spent the most time on**
@@ -86,7 +84,7 @@ the same day. How you handle the first feedback matters more than the post itsel
 >
 > **How I tested it**
 >
-> There are 160+ unit tests and 90+ tests that drive a real Chromium: typing, uploads, forms, translations,
+> There are 200+ unit tests and 100+ tests that drive a real Chromium: typing, uploads, forms, translations,
 > accessibility. The whole browser suite also passes on React 18 and 19. Writing them paid off. While building
 > the demo site I found that code blocks had no padding and clipped long lines instead of scrolling. It was a
 > CSS specificity bug that had been there from the start. It now has a test that fails without the fix.
@@ -117,7 +115,7 @@ same day.
 > - Tables, tabbed code blocks, dark mode, RTL, 5 interface languages
 > - TypeScript types, ESM + CJS, works in the Next.js App Router
 >
-> Live demo, no install: https://akashnegi-github.github.io/react-easy-editor/
+> Live demo, no install: https://react-easy-editor.netlify.app/
 > Repo: https://github.com/AKASHNEGI-github/react-easy-editor
 >
 > Honest limits: HTML output only, no collaboration, browser tests run in Chromium only, translations are
@@ -127,7 +125,7 @@ same day.
 
 **Title:** Show HN: React Easy Editor – a drop-in rich text editor for React
 
-**URL:** `https://akashnegi-github.github.io/react-easy-editor/`
+**URL:** `https://react-easy-editor.netlify.app/`
 
 **First comment (post it yourself right away):**
 
@@ -152,10 +150,10 @@ detected.
 > One component gives you a full toolbar, tables, code blocks with syntax highlighting, image upload, Markdown
 > shortcuts, dark mode and five interface languages. It saves plain HTML and is about 80 KB gzipped.
 >
-> The part I enjoyed most was the testing: 160+ unit tests plus 90+ tests that drive a real browser. Along the
+> The part I enjoyed most was the testing: 200+ unit tests plus 100+ tests that drive a real browser. Along the
 > way they caught bugs I would never have seen by eye.
 >
-> Try it in your browser, no install: https://akashnegi-github.github.io/react-easy-editor/
+> Try it in your browser, no install: https://react-easy-editor.netlify.app/
 > Code (MIT): https://github.com/AKASHNEGI-github/react-easy-editor
 >
 > If you build React apps, I would value your feedback.
@@ -166,7 +164,7 @@ detected.
 
 > React Easy Editor: a rich text editor for React in one component.
 > Tables, code blocks, image upload, Markdown shortcuts, dark mode, 5 languages. MIT, ~80 KB gzipped.
-> Try it in the browser: https://akashnegi-github.github.io/react-easy-editor/
+> Try it in the browser: https://react-easy-editor.netlify.app/
 
 ## 4. Other places that bring steady traffic
 

@@ -43,7 +43,7 @@ try {
   for (const theme of ['light', 'dark']) {
     const page = await open({ theme, width: 1200, height: 900, scale: 2 });
     // A taller editor than the page shows, so the screenshot includes the table, tip and code block.
-    await page.addStyleTag({ content: '.sheet .jc-root { height: 780px !important; }' });
+    await page.addStyleTag({ content: '.sheet .jc-root { height: 880px !important; }' });
     await new Promise((resolve) => setTimeout(resolve, 300));
     await (await page.$('.sheet')).screenshot({ path: join(root, `docs/screenshot-${theme}.png`) });
     console.log(`docs/screenshot-${theme}.png`);
@@ -52,8 +52,9 @@ try {
 
   for (const [path, width, height] of [['docs/social-preview.png', 1280, 640], ['public/og.png', 1200, 630]]) {
     const page = await open({ theme: 'light', width, height });
-    // For link previews the editor should peek up right under the install command.
-    await page.addStyleTag({ content: '.tabbar, .hint { display: none !important; } .playground { padding-top: 40px !important; }' });
+    // For link previews the editor should peek up right under the install command. The download count is
+    // left out: a number in a picture that is never regenerated goes stale.
+    await page.addStyleTag({ content: '.demo-head, .stat { display: none !important; } .playground { padding-top: 40px !important; }' });
     await page.screenshot({ path: join(root, path), clip: { x: 0, y: 0, width, height } });
     console.log(path);
     await page.close();

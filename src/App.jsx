@@ -1,9 +1,12 @@
-// Demo and landing page for react-easy-editor (built for GitHub Pages; not part of the npm package).
+// Demo and landing page for react-easy-editor (deployed on Netlify; not part of the npm package).
+// One page on purpose: a hero, a single live playground, the feature list, how to use it. Keep it that way.
 // The live editor, the tabbed code blocks and the viewer below are all the package's own components.
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { ContentViewer, Editor } from './index';
 import { buildCodeBlock } from './core/codeBlockDom';
-import { DEMOS, LANGS, USE_FILES } from './demo/demos';
+import { cachedTotal, fetchTotalDownloads, formatCount } from './demo/downloads';
+import { FEATURE_GROUPS } from './demo/features';
+import { LANGS, USE_FILES, fakeUpload, playgroundCode, starterDoc } from './demo/playground';
 import { dropSampleImage } from './demo/sampleImage';
 import { useTheme } from './demo/useTheme';
 
@@ -67,59 +70,57 @@ function Code({ files, theme }) {
   return <ContentViewer html={html} theme={theme} />;
 }
 
+// The total is shown only when npm's numbers could be fetched and are above zero (see demo/downloads.js).
+function DownloadStat() {
+  const [total, setTotal] = useState(() => cachedTotal());
+
+  useEffect(() => {
+    let alive = true;
+    fetchTotalDownloads().then((count) => {
+      if (alive && count) setTotal(count);
+    });
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  if (!total) return null;
+  return (
+    <a className="stat" href={NPM} title="Installs from npm so far, counting this package and its earlier name, react-easy-text-editor">
+      <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M10 3v10M6 9.5l4 4 4-4M4 16.5h12" />
+      </svg>
+      <span>
+        <strong>{formatCount(total)}</strong> downloads on npm
+      </span>
+    </a>
+  );
+}
+
+// The one playground. Everything the editor does is in this editor: type, paste, drop an image in, use any
+// toolbar button. The only controls are the two that need a hand: a sample image and the interface language.
 function Playground({ theme }) {
-  const [tab, setTab] = useState('typing');
+  const [html, setHtml] = useState(starterDoc);
   const [lang, setLang] = useState('en');
-  const [docs, setDocs] = useState(() => Object.fromEntries(DEMOS.map((d) => [d.id, d.doc()])));
   const sheetRef = useRef(null);
-  const tabRefs = useRef({});
 
-  const demo = DEMOS.find((d) => d.id === tab);
-  const html = docs[tab];
-  const code = demo.code({ lang });
+  const code = playgroundCode(lang);
   const files = useMemo(() => [{ language: 'javascript', filename: 'App.jsx', code }], [code]);
-  const shown = html.length > 1400 ? `${html.slice(0, 1400)}\n… ${html.length - 1400} more characters` : html;
-
-  const onKeyDown = (event) => {
-    const i = DEMOS.findIndex((d) => d.id === tab);
-    const next = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: DEMOS.length - 1 }[event.key];
-    if (next === undefined) return;
-    event.preventDefault();
-    const target = DEMOS[(next + DEMOS.length) % DEMOS.length].id;
-    setTab(target);
-    tabRefs.current[target]?.focus();
-  };
+  // Long HTML is shown from both ends, so what you just typed (usually at the end) is always visible.
+  const shown = html.length > 1500 ? `${html.slice(0, 700)}\n\n… ${html.length - 1400} more characters …\n\n${html.slice(-700)}` : html;
 
   return (
     <section className="playground wrap" id="demo" aria-labelledby="demo-title">
       <h2 id="demo-title" className="sr-only">Live demo</h2>
 
-      <div className="tabbar">
-        <div className="tabs" role="tablist" aria-label="Demos" onKeyDown={onKeyDown}>
-          {DEMOS.map((d) => (
-            <button
-              key={d.id}
-              ref={(el) => { tabRefs.current[d.id] = el; }}
-              type="button"
-              role="tab"
-              id={`tab-${d.id}`}
-              aria-selected={d.id === tab}
-              aria-controls="demo-panel"
-              tabIndex={d.id === tab ? 0 : -1}
-              className="tab"
-              onClick={() => setTab(d.id)}
-            >
-              {d.label}
-            </button>
-          ))}
-        </div>
-
-        {tab === 'images' && (
+      <div className="demo-head">
+        <p className="hint">
+          This is the real editor, not a recording. Type <code>## </code> and a space for a heading, <code>- </code> for a list, or <code>**bold**</code> for bold. Press <kbd>Ctrl+K</kbd> for a link, and drag in or paste an image.
+        </p>
+        <div className="controls">
           <button type="button" className="ghost-btn" onClick={() => dropSampleImage(sheetRef.current.querySelector('.jc-content'))}>
             Insert a sample image
           </button>
-        )}
-        {tab === 'languages' && (
           <label className="select-label">
             <span>Interface language</span>
             <select value={lang} onChange={(e) => setLang(e.target.value)}>
@@ -128,37 +129,55 @@ function Playground({ theme }) {
               ))}
             </select>
           </label>
-        )}
+        </div>
       </div>
 
-      <div role="tabpanel" id="demo-panel" aria-labelledby={`tab-${tab}`}>
-        <p className="hint">{demo.hint}</p>
+      <div className="sheet" ref={sheetRef}>
+        <Editor
+          value={html}
+          onChange={setHtml}
+          height={480}
+          theme={theme}
+          placeholder="Start typing…"
+          onImageUpload={fakeUpload}
+          translations={LANGS.find((l) => l.id === lang)?.pack}
+        />
+      </div>
 
-        <div className="sheet" ref={sheetRef}>
-          <Editor
-            key={tab}
-            value={html}
-            onChange={(next) => setDocs((prev) => (prev[tab] === next ? prev : { ...prev, [tab]: next }))}
-            height={demo.height}
-            theme={theme}
-            placeholder="Start typing…"
-            {...demo.props({ lang })}
-          />
+      <div className="io">
+        <div className="panel">
+          <h3>In your app</h3>
+          <Code files={files} theme={theme} />
         </div>
+        <div className="panel">
+          <h3>
+            What onChange receives
+            <CopyButton text={html} label="Copy HTML" />
+          </h3>
+          <pre className="out" tabIndex={0} aria-label="HTML produced by the editor">{shown}</pre>
+        </div>
+      </div>
+    </section>
+  );
+}
 
-        <div className="io">
-          <div className="panel">
-            <h3>In your app</h3>
-            <Code files={files} theme={theme} />
+// The full list lives in demo/features.js, which is also written into index.html for search engines.
+function Features() {
+  return (
+    <section className="features wrap" id="features" aria-labelledby="features-title">
+      <h2 id="features-title">What&rsquo;s inside</h2>
+      <p className="section-lede">Everything you can do from the toolbar, and what you get as a developer.</p>
+      <div className="feature-grid">
+        {FEATURE_GROUPS.map((group) => (
+          <div className="feature-group" key={group.title}>
+            <h3>{group.title}</h3>
+            <ul>
+              {group.items.map((item) => (
+                <li key={item.text}>{item.text}</li>
+              ))}
+            </ul>
           </div>
-          <div className="panel">
-            <h3>
-              What onChange receives
-              <CopyButton text={html} label="Copy HTML" />
-            </h3>
-            <pre className="out" tabIndex={0} aria-label="HTML produced by the editor">{shown}</pre>
-          </div>
-        </div>
+        ))}
       </div>
     </section>
   );
@@ -187,6 +206,7 @@ export default function App() {
           react-easy-editor
         </a>
         <nav className="nav" aria-label="Project links">
+          <a href="#features">Features</a>
           <a href={REPO}>GitHub</a>
           <a href={NPM}>npm</a>
           <ThemeToggle theme={theme} onToggle={toggleTheme} />
@@ -199,13 +219,18 @@ export default function App() {
           <p className="lede">
             Add <code>&lt;Editor /&gt;</code> and your users get a full toolbar, tables, code blocks, image upload, Markdown shortcuts and dark mode. Nothing to configure, and free under the MIT license.
           </p>
-          <div className="install">
-            <code>npm install react-easy-editor</code>
-            <CopyButton text="npm install react-easy-editor" className="install-copy" />
+          <div className="install-row">
+            <div className="install">
+              <code>npm install react-easy-editor</code>
+              <CopyButton text="npm install react-easy-editor" className="install-copy" />
+            </div>
+            <DownloadStat />
           </div>
         </section>
 
         <Playground theme={theme} />
+
+        <Features />
 
         <section className="use wrap" aria-labelledby="use-title">
           <h2 id="use-title">Use it</h2>

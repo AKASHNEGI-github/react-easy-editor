@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://akashnegi-github.github.io/react-easy-editor/sitemap.xml
+Sitemap: https://react-easy-editor.netlify.app/sitemap.xml

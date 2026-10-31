@@ -66,6 +66,8 @@ Translations written by a non-native speaker are fine as a start. Please say so 
 - Keep a pull request focused on one change.
 - Update `CHANGELOG.md` under an "Unreleased" heading.
 - Update the README and `types/index.d.ts` when you add or change a prop.
+- Added a toolbar button? List it in `src/demo/features.js`, which feeds the feature list on the demo site. `npm test`
+  fails until you do.
 - Say how you tested it. A screenshot helps for anything visual.
 
 By contributing you agree that your work is released under the [MIT license](./LICENSE).

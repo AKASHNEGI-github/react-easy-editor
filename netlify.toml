@@ -1,0 +1,14 @@
+# Netlify builds the demo and landing site (not the npm package) from this repository.
+# `npm run build` builds the library into dist/, so the site has its own command and folder.
+[build]
+  command = "npm run build:demo"
+  publish = "demo-dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# The hashed files under /assets never change, so browsers can keep them for a year.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
